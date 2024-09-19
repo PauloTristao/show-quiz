@@ -1,13 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
-function Game({ navigation }) {
+function List({ navigation }) {
   <View style={styles.container}>
-    <Text>Game</Text>
+    <Text>List</Text>
   </View>;
 }
 
-export default Game;
+export default List;
 
 const styles = StyleSheet.create({
   container: {

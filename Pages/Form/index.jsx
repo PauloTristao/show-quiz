@@ -1,13 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-function Game({ navigation }) {
-  <View style={styles.container}>
-    <Text>Game</Text>
-  </View>;
+function Form({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text>Form</Text>
+    </View>
+  );
 }
 
-export default Game;
+export default Form;
 
 const styles = StyleSheet.create({
   container: {
