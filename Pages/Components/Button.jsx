@@ -1,10 +1,10 @@
 import React from "react";
 import { TouchableOpacity, View, Text } from "react-native";
-import styles from "./Styles";
+// import styles from "./Styles";
 
-function Button({ text, handleClick }) {
+function Button({ text, handleClick, style }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={() => handleClick()}>
+    <TouchableOpacity style={style} onPress={() => handleClick()}>
       <Text>{text}</Text>
     </TouchableOpacity>
   );

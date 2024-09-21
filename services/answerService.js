@@ -1,22 +1,8 @@
-import * as dbservice from "./dbservice.jsx";
-
-export async function createTable() {
-  const query = `CREATE TABLE IF NOT EXISTS tbAnswers
-        (
-            AnswerId text not null PRIMARY KEY,
-            Description text not null,
-            IsCorrect text not null,
-            QuestionId text not null
-            FOREIGN KEY (QuestionId) REFERENCES tbQuestions(QuestionId) 
-        )`;
-  var cx = await dbservice.getDbConnection();
-  await cx.execAsync(query);
-  await cx.closeAsync();
-}
+import * as dbService from "./dbService.js";
 
 export async function getAllAnswers() {
   var retorno = [];
-  var dbCx = await dbservice.getDbConnection();
+  var dbCx = await dbService.getDbConnection();
   const registros = await dbCx.getAllAsync("SELECT * FROM tbAnswers");
   await dbCx.closeAsync();
 
@@ -34,7 +20,7 @@ export async function getAllAnswers() {
 }
 
 export async function addAnswer(answer) {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query =
     "insert into tbAnswers (AnswerId, Description, IsCorrect, QuestionId) values (?,?,?,?)";
   const result = await dbCx.runAsync(query, [
@@ -48,7 +34,7 @@ export async function addAnswer(answer) {
 }
 
 export async function updateAnswer(answer) {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query =
     "update tbAnswers set Description=?, IsCorrect=?, QuestionId=? where AnswerId=?";
   const result = await dbCx.runAsync(query, [
@@ -62,7 +48,7 @@ export async function updateAnswer(answer) {
 }
 
 export async function deleteAnswer(answerId) {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query = "delete from tbAnswers where AnswerId=?";
   const result = await dbCx.runAsync(query, answerId);
   await dbCx.closeAsync();
@@ -70,7 +56,7 @@ export async function deleteAnswer(answerId) {
 }
 
 export async function deleteAllAnswers() {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query = "delete from tbAnswers";
   await dbCx.execAsync(query);
   await dbCx.closeAsync();

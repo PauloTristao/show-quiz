@@ -1,19 +1,8 @@
-import * as dbservice from "./dbservice.jsx";
-
-export async function createTable() {
-  const query = `CREATE TABLE IF NOT EXISTS tbThemes
-        (
-            ThemeId text not null PRIMARY KEY,
-            Description text not null,     
-        )`;
-  var cx = await dbservice.getDbConnection();
-  await cx.execAsync(query);
-  await cx.closeAsync();
-}
+import * as dbService from "./dbService";
 
 export async function getAllThemes() {
   var retorno = [];
-  var dbCx = await dbservice.getDbConnection();
+  var dbCx = await dbService.getDbConnection();
   const registros = await dbCx.getAllAsync("SELECT * FROM tbThemes");
   await dbCx.closeAsync();
 
@@ -29,7 +18,8 @@ export async function getAllThemes() {
 }
 
 export async function addTheme(theme) {
-  let dbCx = await dbservice.getDbConnection();
+  console.log(JSON.stringify(theme));
+  let dbCx = await dbService.getDbConnection();
   let query = "insert into tbThemes (ThemeId, Description) values (?,?)";
   const result = await dbCx.runAsync(query, [theme.themeId, theme.description]);
   await dbCx.closeAsync();
@@ -37,7 +27,7 @@ export async function addTheme(theme) {
 }
 
 export async function updateTheme(theme) {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query = "update tbThemes set Description=? where ThemeId=?";
   const result = await dbCx.runAsync(query, [theme.description, theme.themeId]);
   await dbCx.closeAsync();
@@ -45,7 +35,7 @@ export async function updateTheme(theme) {
 }
 
 export async function deleteTheme(themeId) {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query = "delete from tbThemes where ThemeId=?";
   const result = await dbCx.runAsync(query, themeId);
   await dbCx.closeAsync();
@@ -53,7 +43,7 @@ export async function deleteTheme(themeId) {
 }
 
 export async function deleteAllThemes() {
-  let dbCx = await dbservice.getDbConnection();
+  let dbCx = await dbService.getDbConnection();
   let query = "delete from tbThemes";
   await dbCx.execAsync(query);
   await dbCx.closeAsync();
