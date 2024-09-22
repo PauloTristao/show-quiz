@@ -6,8 +6,9 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 const DropdownComponent = ({
   data,
   style,
-  setSelectedValue,
+  setSelectedLabel,
   selectedValue,
+  setSelectedValue,
 }) => {
   // const [value, setValue] = useState(null);
 
@@ -26,7 +27,8 @@ const DropdownComponent = ({
       placeholder={selectedValue ? selectedValue : "Select Item"}
       searchPlaceholder="Search..."
       onChange={(item) => {
-        setSelectedValue(item.label);
+        setSelectedLabel(item.label);
+        setSelectedValue(item.value);
       }}
       renderLeftIcon={() => (
         <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
