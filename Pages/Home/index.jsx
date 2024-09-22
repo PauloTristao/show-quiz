@@ -23,7 +23,6 @@ function Home({ navigation }) {
       let questions = await questionService.getAllQuestions();
       let themes = await themeService.getAllThemes();
       let answers = await answerService.getAllAnswers();
-
       setQuestions(questions);
       setThemes(themes);
       setAnswers(answers);

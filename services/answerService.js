@@ -55,6 +55,21 @@ export async function deleteAnswer(answerId) {
   return result.changes == 1;
 }
 
+export async function deleteAnswers(answersToDelete) {
+  let dbCx = await dbService.getDbConnection();
+
+  try {
+    await Promise.all(
+      answersToDelete.map(async (answer) => {
+        const query = "DELETE FROM tbAnswers WHERE AnswerId=?";
+        await dbCx.runAsync(query, answer.answerId);
+      })
+    );
+  } finally {
+    await dbCx.closeAsync();
+  }
+}
+
 export async function deleteAllAnswers() {
   let dbCx = await dbService.getDbConnection();
   let query = "delete from tbAnswers";

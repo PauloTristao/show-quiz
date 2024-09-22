@@ -18,7 +18,6 @@ export async function getAllThemes() {
 }
 
 export async function addTheme(theme) {
-  console.log(JSON.stringify(theme));
   let dbCx = await dbService.getDbConnection();
   let query = "insert into tbThemes (ThemeId, Description) values (?,?)";
   const result = await dbCx.runAsync(query, [theme.themeId, theme.description]);

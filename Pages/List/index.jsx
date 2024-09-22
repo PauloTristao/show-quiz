@@ -5,10 +5,14 @@ import ListItem from "../Components/ListItem.jsx";
 import { QuestionContext } from "../../context/QuestionContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import * as themeService from "../../services/themeService";
+import * as questionService from "../../services/questionService.js";
+import * as answerService from "../../services/answerService.js";
+import { AnswerContext } from "../../context/AnswerContext.js";
 
 function List({ navigation, route }) {
   const { data, screenName } = route.params;
-  const { questions } = useContext(QuestionContext);
+  const { questions, setQuestions } = useContext(QuestionContext);
+  const { answers, setAnswers } = useContext(AnswerContext);
   const { themes, setThemes } = useContext(ThemeContext);
 
   function removeElement(id) {
@@ -33,6 +37,26 @@ function List({ navigation, route }) {
           prevThemes.filter((theme) => theme.themeId !== themeId)
         );
         Alert.alert("Success!", "Successfully deleted.");
+      } else if (screenName.toLowerCase() === "questions") {
+        let questionId = id;
+        const answersToDelete = answers.filter(
+          (answer) => answer.questionId === questionId
+        );
+        await answerService.deleteAnswers(answersToDelete);
+        setAnswers((prevAnswers) =>
+          prevAnswers.filter(
+            (answerItem) =>
+              !answersToDelete.some(
+                (answer) => answer.answerId === answerItem.answerId
+              )
+          )
+        );
+
+        await questionService.deleteQuestion(questionId);
+        setQuestions((prevQuestions) =>
+          prevQuestions.filter((question) => question.questionId !== questionId)
+        );
+        Alert.alert("Success!", "Successfully deleted.");
       }
     } catch (e) {
       Alert.alert(e.message || e.toString());
@@ -47,7 +71,14 @@ function List({ navigation, route }) {
         handleClick={() =>
           navigation.navigate("Form", {
             screenName: screenName,
-            data: data,
+            data:
+              screenName.toLowerCase() === "themes"
+                ? data
+                : {
+                    id: undefined,
+                    description: undefined,
+                    themeId: data?.id,
+                  },
           })
         }
         style={styles.button}
@@ -65,6 +96,33 @@ function List({ navigation, route }) {
                 })
               }
               handleDelete={() => removeElement(theme.themeId)}
+              handleLongPress={() =>
+                navigation.navigate("List", {
+                  screenName: "Questions",
+                  data: { id: theme.themeId, description: theme.description },
+                })
+              }
+            />
+          ))}
+        {screenName.toLowerCase() === "questions" &&
+          questions.map((question) => (
+            <ListItem
+              key={question.questionId}
+              textValue={question.description}
+              handleEdit={() =>
+                navigation.navigate("Form", {
+                  screenName: screenName,
+                  data: {
+                    id: question.questionId,
+                    description: question.description,
+                    themeId: question.themeId,
+                  },
+                })
+              }
+              handleDelete={() => removeElement(question.questionId)}
+              handleLongPress={() => {
+                return;
+              }}
             />
           ))}
       </ScrollView>

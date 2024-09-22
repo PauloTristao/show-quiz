@@ -6,12 +6,16 @@ import {
   TextInput,
   Alert,
   Keyboard,
+  ScrollView,
 } from "react-native";
 import Button from "../Components/Button";
 import * as themeService from "../../services/themeService";
+import * as questionService from "../../services/questionService";
+import * as answerService from "../../services/answerService";
 import { QuestionContext } from "../../context/QuestionContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import { AnswerContext } from "../../context/AnswerContext";
+import AnswerList from "../Components/AnswerList";
 
 function Form({ navigation, route }) {
   const { data, screenName } = route.params;
@@ -20,10 +24,14 @@ function Form({ navigation, route }) {
   const { answers, setAnswers } = useContext(AnswerContext);
 
   const [description, setDescription] = useState();
+  const [questionId, setQuestionId] = useState();
+  const [newAnswers, setNewAnswers] = useState([]);
+  // const [answersValues, setAnswersValues] = useState(new Array(4).fill({}));
 
   useEffect(() => {
     setDescription(data?.description);
     if (screenName.toLowerCase() == "questions") {
+      setQuestionId(data?.id);
     }
   }, []);
 
@@ -33,6 +41,34 @@ function Form({ navigation, route }) {
 
   async function saveData() {
     if (screenName.toLowerCase() == "questions") {
+      let newRegister = data?.id == undefined;
+      let obj = {
+        questionId: newRegister ? createUniqueId() : data?.id,
+        description: description,
+        themeId: data?.themeId,
+      };
+      setQuestionId(obj.questionId);
+      try {
+        let response = false;
+        if (newRegister) response = await questionService.addQuestion(obj);
+        else response = await questionService.updateQuestion(obj);
+        if (response) {
+          if (newRegister) {
+            setQuestions((prevQuestions) => [...prevQuestions, obj]);
+            saveAnswers(obj.questionId);
+          } else {
+            setQuestions((prevQuestions) =>
+              prevQuestions.map((question) =>
+                question.questionId === obj.questionId ? obj : question
+              )
+            );
+            saveAnswers(obj.questionId);
+          }
+        } else Alert.alert("Failed!");
+        Keyboard.dismiss();
+      } catch (e) {
+        Alert.alert(e);
+      }
     } else if (screenName.toLowerCase() == "themes") {
       let newRegister = data?.id == undefined;
       let obj = {
@@ -67,12 +103,74 @@ function Form({ navigation, route }) {
     }
   }
 
+  async function saveAnswers(questionId) {
+    try {
+      let success = [];
+      for (const answer of newAnswers) {
+        let newRegister = !answers.find(
+          (ans) => ans.answerId == answer.answerId
+        );
+
+        let obj = {
+          answerId: answer.answerId,
+          description: answer.description,
+          isCorrect: answer.isCorrect,
+          questionId: questionId,
+        };
+        let response = false;
+        if (newRegister) {
+          response = await answerService.addAnswer(obj);
+        } else {
+          response = await answerService.updateAnswer(obj);
+        }
+        if (response) {
+          if (newRegister) {
+            setAnswers((prevAnswers) => [...prevAnswers, obj]);
+          } else {
+            setAnswers((prevAnswers) =>
+              prevAnswers.map((ans) =>
+                ans.answerId === obj.answerId ? obj : ans
+              )
+            );
+          }
+          success.push(1);
+        } else {
+          success.push(0);
+        }
+      }
+      if (success.some((value) => value === 0)) {
+        Alert.alert("Failed!");
+      } else {
+        Alert.alert("Success!", "Successfully saved.", [
+          {
+            text: "OK",
+            onPress: () => navigation.goBack(),
+          },
+        ]);
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while saving.");
+      console.error(error);
+    }
+  }
+
+  function returnAnswers() {
+    return (
+      <AnswerList
+        answers={answers}
+        newAnswers={newAnswers}
+        setNewAnswers={setNewAnswers}
+        questionId={questionId}
+      />
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>
-        {`${data?.id ? "Add" : "Edit"} ${screenName
+        {`${data?.id ? "Edit" : "Add"} ${screenName
           .toLowerCase()
-          .replace("s", "")}`}
+          .slice(0, -1)}`}
       </Text>
       <TextInput
         onChangeText={(valor) => setDescription(valor)}
@@ -85,9 +183,7 @@ function Form({ navigation, route }) {
         </View>
       )}
       {screenName.toLowerCase() == "questions" && (
-        <View>
-          <Text>Questions</Text>
-        </View>
+        <ScrollView>{returnAnswers()}</ScrollView>
       )}
 
       <Button
