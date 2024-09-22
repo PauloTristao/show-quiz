@@ -5,44 +5,67 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { QuestionContext } from "../../context/QuestionContext";
 
 function GameConfig({ navigation }) {
-  const {themes} = useContext(ThemeContext);
-  const {questions} = useContext(QuestionContext);
+  const { themes } = useContext(ThemeContext);
+  const { questions } = useContext(QuestionContext);
 
   //const [questions, setQuestions] = useState(null);
   //const [themes, setThemes] = useState(null);
 
-  const [quantity, setQuantity] = useState(0) //Quantidade de perguntas desejadas
+  const [quantity, setQuantity] = useState(0); //Quantidade de perguntas desejadas
   const [selectedLabel, setSelectedLabel] = useState("");
   const [selectedValue, setSelectedValue] = useState();
+  const [possibleQuestions, setPossibleQuestions] = useState(0);
 
   useEffect(() => {}, [questions]);
   useEffect(() => {}, [themes]);
 
-
-  const themesData = themes.map((theme) =>({
+  const themesData = themes.map((theme) => ({
     label: theme.description,
-    value: theme.themeId, 
-  }))
+    value: theme.themeId,
+  }));
 
   // Verificar se está funcionando. Lógica: Filtrar todas as possíveis questões
   // que possui o mesmo ID do selecionado no DropDown
-  const possibleQuestions = questions
-  .filter((question) => question.themeId === selectedValue)
-  .map((question) => ({
-    value: question.questionId,
-  }))
+  useEffect(() => {
+    setPossibleQuestions(
+      questions
+        .filter((question) => question.themeId === selectedValue)
+        .map((question) => ({
+          value: question.questionId,
+        }))
+    );
+  }, [selectedValue]);
 
+  // Função para gerar números aleatórios diferentes, caso um número já tenha sido sorteado,
+  // deverá refazer a iteração até gerar um array completo com números diferentes
+  function generateRandomNumbers(size, quantity) {
+    const numerosAleatorios = [];
+    for (let i = 0; i < quantity; i++) {
+      // Gera um número inteiro aleatório entre min e max
+      const numero = Math.floor(Math.random() * size);
+      if (!numerosAleatorios.some((num) => num === numero)) {
+        numerosAleatorios.push(numero);
+      } else {
+        // Caso já haja um número pego, deverá desfazer a iteração
+        i = i - 1;
+      }
+    }
+    return numerosAleatorios;
+  }
 
+  // Função para gerar as questões que serão enviadas para a página do jogo
+  function generateQuestions() {
+    const numerosAleatorios = generateRandomNumbers(
+      possibleQuestions.length,
+      quantity
+    );
+    const questions = [];
 
-  // async function carregaDados() {
-  //   try {
-  //     console.log("carregando");
-  //     let questions = await questionservice.getAllQuestions();
-  //     setQuestions(questions);
-  //   } catch (e) {
-  //     Alert.alert(e.toString());
-  //   }
-  // }
+    for (let i = 0; i < numerosAleatorios.length; i++) {
+      questions.push(possibleQuestions[numerosAleatorios[i]]);
+    }
+    navigation.navigate("Game", { questionsId: questions });
+  }
 
   return (
     <View style={styles.container}>
@@ -53,24 +76,30 @@ function GameConfig({ navigation }) {
         selectedValue={selectedLabel}
         setSelectedValue={setSelectedValue}
       />
-    <View style={styles.inputQuestions}>
-      <Text style={styles.label}>Digite a quantidade de perguntas desejadas:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={quantity}
-        onChangeText={setQuantity}
-        placeholder="Número de perguntas"
-      />
-      <Text styles={styles.label}>Quantidade de perguntas disponíveis: {possibleQuestions.length} </Text>
-    </View>
-      {selectedValue && (possibleQuestions.length >= quantity) && quantity > 0 && (
-        <Button
-          title={"Iniciar novo jogo"}
-          handleClick={() => navigation.navigate("Game")}
-          style={styles.button}
-        ></Button>
-      )}
+      <View style={styles.inputQuestions}>
+        <Text style={styles.label}>
+          Digite a quantidade de perguntas desejadas:
+        </Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          value={quantity}
+          onChangeText={setQuantity}
+          placeholder="Número de perguntas"
+        />
+        <Text styles={styles.label}>
+          Quantidade de perguntas disponíveis: {possibleQuestions.length}{" "}
+        </Text>
+      </View>
+      {selectedValue &&
+        possibleQuestions.length >= quantity &&
+        quantity > 0 && (
+          <Button
+            title={"Iniciar novo jogo"}
+            onPress={() => generateQuestions()}
+            style={styles.button}
+          ></Button>
+        )}
     </View>
   );
 }
@@ -91,10 +120,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     width: "80%",
   },
-    inputQuestions: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 30
+  inputQuestions: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 30,
   },
   label: {
     fontSize: 18,
@@ -102,7 +131,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 10,
   },

@@ -21,12 +21,13 @@ function Home({ navigation }) {
   async function loadData() {
     try {
       let questions = await questionService.getAllQuestions();
-      let themes = await themeService.getAllThemes();
-      let answers = await answerService.getAllAnswers();
       setQuestions(questions);
+      let themes = await themeService.getAllThemes();
       setThemes(themes);
+      let answers = await answerService.getAllAnswers();
       setAnswers(answers);
     } catch (e) {
+      console.log(e.toString());
       Alert.alert(e.toString());
     }
   }

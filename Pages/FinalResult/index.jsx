@@ -1,5 +1,6 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+
 
 function FinalResult({ navigation }) {
   const [result, setResult] = useState(0);
@@ -11,7 +12,7 @@ function FinalResult({ navigation }) {
       <Text>Você acertou {result} de X questões</Text>
       <Button
           title={"Revisar questões"}
-          handleClick={() => navigation.navigate("GameConfig")}
+          onPress={() => navigation.navigate("GameConfig")}
           style={styles.button}
         ></Button>
     </View>

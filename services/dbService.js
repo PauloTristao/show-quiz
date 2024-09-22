@@ -1,8 +1,15 @@
 import * as SQLite from "expo-sqlite/next";
 
 export async function getDbConnection() {
-  const cx = await SQLite.openDatabaseAsync("dbQuiz.db");
-  return cx;
+  try {
+    const cx = await SQLite.openDatabaseAsync("dbQuiz.db");
+    return cx;
+  } catch (e) {
+    console.log(
+      "Erro ao abrir a conexão com o banco de dados: " + e.toString()
+    );
+    throw e; // Lança o erro para ser tratado em outro lugar, se necessário
+  }
 }
 
 export async function createTables() {
@@ -29,9 +36,17 @@ export async function createTables() {
     FOREIGN KEY (QuestionId) REFERENCES tbQuestions(QuestionId)
   );`;
 
-  var cx = await getDbConnection();
-  await cx.execAsync(query1);
-  await cx.execAsync(query2);
-  await cx.execAsync(query3);
-  await cx.closeAsync();
+  let cx; // Declara a conexão fora do try
+  try {
+    cx = await getDbConnection();
+    await cx.execAsync(query1);
+    await cx.execAsync(query2);
+    await cx.execAsync(query3);
+  } catch (e) {
+    console.log("Erro ao criar tabelas: " + e.toString());
+  } finally {
+    if (cx) {
+      await cx.closeAsync(); // Fecha a conexão se foi aberta
+    }
+  }
 }
