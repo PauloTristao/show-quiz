@@ -105,26 +105,28 @@ function List({ navigation, route }) {
             />
           ))}
         {screenName.toLowerCase() === "questions" &&
-          questions.map((question) => (
-            <ListItem
-              key={question.questionId}
-              textValue={question.description}
-              handleEdit={() =>
-                navigation.navigate("Form", {
-                  screenName: screenName,
-                  data: {
-                    id: question.questionId,
-                    description: question.description,
-                    themeId: question.themeId,
-                  },
-                })
-              }
-              handleDelete={() => removeElement(question.questionId)}
-              handleLongPress={() => {
-                return;
-              }}
-            />
-          ))}
+          questions
+            .filter((question) => question.themeId === data?.id)
+            ?.map((question) => (
+              <ListItem
+                key={question.questionId}
+                textValue={question.description}
+                handleEdit={() =>
+                  navigation.navigate("Form", {
+                    screenName: screenName,
+                    data: {
+                      id: question.questionId,
+                      description: question.description,
+                      themeId: question.themeId,
+                    },
+                  })
+                }
+                handleDelete={() => removeElement(question.questionId)}
+                handleLongPress={() => {
+                  return;
+                }}
+              />
+            ))}
       </ScrollView>
     </View>
   );

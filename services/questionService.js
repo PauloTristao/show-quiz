@@ -5,18 +5,15 @@ export async function getAllQuestions() {
   try {
     var retorno = [];
     dbCx = await dbService.getDbConnection();
-    console.log("Teste");
     const registros = await dbCx.getAllAsync("SELECT * FROM tbQuestions");
-    console.log("Teste");
     for (const registro of registros) {
       let obj = {
         questionId: registro.QuestionId,
-        descricao: registro.Descricao,
+        description: registro.Description,
         themeId: registro.ThemeId,
       };
       retorno.push(obj);
     }
-    console.log("Teste");
     return retorno;
   } catch (e) {
     console.log("Erro no questionService:" + e.toString());

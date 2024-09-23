@@ -2,7 +2,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 
-import * as dbService from "./services/dbService";
 import Home from "./Pages/Home";
 import FinalResult from "./Pages/FinalResult";
 import GameConfig from "./Pages/GameConfig";
@@ -16,17 +15,6 @@ import { AnswerProvider } from "./context/AnswerContext";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  useEffect(() => {
-    createDatabase();
-  }, []);
-
-  async function createDatabase() {
-    try {
-      await dbService.createTables();
-    } catch (e) {
-      console.log(e);
-    }
-  }
   return (
     <ThemeProvider>
       <QuestionProvider>

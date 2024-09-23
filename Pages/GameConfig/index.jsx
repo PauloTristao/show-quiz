@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, TextInput, Button } from "react-native";
 import DropdownComponent from "../Components/DropdownComponent";
 import { ThemeContext } from "../../context/ThemeContext";
 import { QuestionContext } from "../../context/QuestionContext";
+import { AnswerContext } from "../../context/AnswerContext";
 
 function GameConfig({ navigation }) {
   const { themes } = useContext(ThemeContext);
   const { questions } = useContext(QuestionContext);
+  const { answers, answersGame, setAnswersGame } = useContext(AnswerContext);
 
   //const [questions, setQuestions] = useState(null);
   //const [themes, setThemes] = useState(null);
@@ -64,6 +66,8 @@ function GameConfig({ navigation }) {
     for (let i = 0; i < numerosAleatorios.length; i++) {
       questions.push(possibleQuestions[numerosAleatorios[i]]);
     }
+
+    setAnswersGame([]);
     navigation.navigate("Game", { questionsId: questions });
   }
 

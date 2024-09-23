@@ -177,11 +177,6 @@ function Form({ navigation, route }) {
         style={styles.caixaTexto}
         value={description}
       />
-      {screenName.toLowerCase() == "themes" && (
-        <View>
-          <Text>Themes</Text>
-        </View>
-      )}
       {screenName.toLowerCase() == "questions" && (
         <ScrollView>{returnAnswers()}</ScrollView>
       )}

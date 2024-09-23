@@ -7,61 +7,73 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import AnswerList from "../Components/AnswerList";
+import AnswerListGame from "../Components/AnswerListGame";
 import { AnswerContext } from "../../context/AnswerContext";
 import { QuestionContext } from "../../context/QuestionContext";
 
 function Game({ navigation, route }) {
   const { questionsId } = route.params;
-  const { answers } = useContext(AnswerContext);
-  const { questions, setQuestionsGame } = useContext(QuestionContext);
+  const { answers, answersGame, setAnswersGame } = useContext(AnswerContext);
+  const { questions, questionsGame, setQuestionsGame } =
+    useContext(QuestionContext);
 
   const [questionMoment, setQuestionMoment] = useState(null);
+  const [questionOrder, setQuestionOrder] = useState(0);
   const [answersMoment, setAnswersMoment] = useState([]);
 
   useEffect(() => {
+    console.log("Eai mano");
+    const questionIdsArray = questionsId.map((id) => id.value);
     const filteredQuestions = questions.filter((question) =>
-      questionsId.includes(question.questionId)
+      questionIdsArray.includes(question.questionId)
     );
-    console.log("@@ opa 1", filteredQuestions);
     setQuestionsGame(filteredQuestions);
 
     if (filteredQuestions.length > 0) {
-      setQuestionMoment(filteredQuestions[filteredQuestions.length - 1]);
+      setQuestionMoment(filteredQuestions[questionOrder]);
     }
   }, [questionsId, questions]);
 
   useEffect(() => {
-    console.log("@@ opa 2", questionMoment);
     if (questionMoment) {
       const filteredAnswers = answers.filter(
         (answer) => answer.questionId === questionMoment.questionId
       );
       setAnswersMoment(filteredAnswers);
     }
-
-    console.log("@@ opa 3", answersMoment);
   }, [questionMoment]);
 
   function returnAnswers() {
-    return <AnswerList answers={answersMoment} />;
+    return <AnswerListGame answersParam={answersMoment} />;
+  }
+
+  function handleNavigation() {
+    setQuestionOrder((prevOrder) => {
+      const newOrder = prevOrder + 1;
+
+      if (newOrder >= questionsGame.length) {
+        navigation.navigate("FinalResult");
+      } else {
+        setQuestionMoment(questionsGame[newOrder]);
+      }
+
+      return newOrder;
+    });
   }
 
   return (
     <View style={styles.container}>
-      <TextInput
-        editable={false}
-        style={styles.caixaTexto}
-        value={questionMoment.description}
-      />
-      {/* <ScrollView>{returnAnswers()}</ScrollView> */}
-      <Button
-        title={"Next"}
-        onPress={() => {
-          return;
-        }}
-        style={styles.button}
-      />
+      <View style={styles.questionArea}>
+        <Text style={styles.caixaTexto}>{questionMoment?.description}</Text>
+        <ScrollView>{returnAnswers()}</ScrollView>
+        <Button
+          title={"Next"}
+          onPress={() => {
+            handleNavigation();
+          }}
+          style={styles.button}
+        />
+      </View>
     </View>
   );
 }
@@ -80,10 +92,14 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 20,
-    width: "80%",
+    width: "100%",
     padding: 10,
   },
   button: {
     marginTop: 20,
+  },
+  questionArea: {
+    flex: 0.5,
+    width: "80%",
   },
 });

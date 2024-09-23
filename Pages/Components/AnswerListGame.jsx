@@ -1,29 +1,44 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { AnswerContext } from "../../context/AnswerContext";
 
-const AnswerList = ({ answers, questionId }) => {
+const AnswerList = ({ answersParam, questionId }) => {
   const [answersByQuestion, setAnswersByQuestion] = useState([]);
-
-  function createUniqueId() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2);
-  }
+  const { answers, answersGame, setAnswersGame } = useContext(AnswerContext);
 
   useEffect(() => {
-    if (answers) {
-      setAnswersByQuestion(answers);
+    if (answersParam) {
+      setAnswersByQuestion(answersParam);
     }
-  }, [answers]);
+  }, [answersParam]);
 
-  // const handleCheckboxPress = (answerId) => {
-  //   setNewAnswers((prevAnswers) =>
-  //     prevAnswers.map((answer) =>
-  //       answer.answerId === answerId
-  //         ? { ...answer, isCorrect: answer.isCorrect === 1 ? 0 : 1 }
-  //         : answer
-  //     )
-  //   );
-  // };
+  const handleCheckboxPress = (answerId) => {
+    setAnswersGame((prevAnswers) => {
+      const answerToUpdate = answers.find(
+        (answer) => answer.answerId === answerId
+      );
+
+      if (answerToUpdate) {
+        const existingAnswer = prevAnswers.find(
+          (answer) => answer.answerId === answerId
+        );
+        const updatedAnswer = existingAnswer
+          ? {
+              ...existingAnswer,
+              isCorrect: existingAnswer.isCorrect === 1 ? 0 : 1,
+            }
+          : { ...answerToUpdate, isCorrect: 1 };
+        if (updatedAnswer.isCorrect === 1) {
+          return [...prevAnswers, updatedAnswer];
+        } else {
+          return prevAnswers.filter((answer) => answer.answerId !== answerId);
+        }
+      }
+
+      return prevAnswers;
+    });
+  };
 
   const renderAnswers = () => {
     return answersByQuestion.map((answer) => (
@@ -33,16 +48,11 @@ const AnswerList = ({ answers, questionId }) => {
           unFillColor="#FFFFFF"
           text="Custom Checkbox"
           innerIconStyle={{ borderWidth: 2 }}
-          isChecked={answer.isCorrect === 1}
           onPress={() => {
             handleCheckboxPress(answer.answerId);
           }}
         />
-        <TextInput
-          style={styles.itemForm}
-          value={answer.description}
-          editable={false}
-        />
+        <Text style={styles.itemForm}>{answer.description}</Text>
       </View>
     ));
   };
@@ -59,7 +69,8 @@ const styles = StyleSheet.create({
     borderColor: "#dbd9d9",
     borderWidth: 2,
     backgroundColor: "#dbd9d9",
-    width: "80%",
+    width: "85%",
+    textAlignVertical: "center",
   },
   line: {
     flexDirection: "row",

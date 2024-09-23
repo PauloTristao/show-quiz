@@ -4,6 +4,7 @@ import Button from "../Components/Button";
 import * as themeService from "../../services/themeService";
 import * as answerService from "../../services/answerService";
 import * as questionService from "../../services/questionService";
+import * as dbService from "../../services/dbService";
 
 import { QuestionContext } from "../../context/QuestionContext";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -15,8 +16,17 @@ function Home({ navigation }) {
   const { answers, setAnswers } = useContext(AnswerContext);
 
   useEffect(() => {
-    loadData();
+    createDatabase();
   }, []);
+
+  async function createDatabase() {
+    try {
+      await dbService.createTables();
+      loadData();
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   async function loadData() {
     try {
