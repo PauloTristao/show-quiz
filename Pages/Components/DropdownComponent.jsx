@@ -10,15 +10,12 @@ const DropdownComponent = ({
   selectedValue,
   setSelectedValue,
 }) => {
-  // const [value, setValue] = useState(null);
-
   return (
     <Dropdown
       style={style}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
-      // iconStyle={styles.iconStyle}
       data={data}
       search
       maxHeight={300}
@@ -45,16 +42,14 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "#4B0082",
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: "#4B0082",
   },
   iconStyle: {
     width: 20,
     height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
   },
 });

@@ -1,15 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import AnswerListGame from "../Components/AnswerListGame";
 import { AnswerContext } from "../../context/AnswerContext";
 import { QuestionContext } from "../../context/QuestionContext";
+import Button from "../Components/Button";
 
 function Game({ navigation, route }) {
   const { questionsId } = route.params;
@@ -22,7 +16,6 @@ function Game({ navigation, route }) {
   const [answersMoment, setAnswersMoment] = useState([]);
 
   useEffect(() => {
-    console.log("Eai mano");
     const questionIdsArray = questionsId.map((id) => id.value);
     const filteredQuestions = questions.filter((question) =>
       questionIdsArray.includes(question.questionId)
@@ -67,11 +60,10 @@ function Game({ navigation, route }) {
         <Text style={styles.caixaTexto}>{questionMoment?.description}</Text>
         <ScrollView>{returnAnswers()}</ScrollView>
         <Button
-          title={"Next"}
-          onPress={() => {
-            handleNavigation();
-          }}
+          text={"Next"}
+          handleClick={handleNavigation}
           style={styles.button}
+          textStyle={styles.buttonText}
         />
       </View>
     </View>
@@ -83,23 +75,45 @@ export default Game;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E6E6FA",
     alignItems: "center",
     justifyContent: "center",
   },
   caixaTexto: {
-    height: 40,
+    height: 100,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 20,
     width: "100%",
     padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    textAlignVertical: "top",
   },
   button: {
     marginTop: 20,
+    backgroundColor: "#4B0082",
+    borderRadius: 10,
+    padding: 10,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
   questionArea: {
-    flex: 0.5,
-    width: "80%",
+    flex: 0.7,
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

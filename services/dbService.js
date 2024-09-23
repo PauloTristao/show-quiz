@@ -8,7 +8,7 @@ export async function getDbConnection() {
     console.log(
       "Erro ao abrir a conexão com o banco de dados: " + e.toString()
     );
-    throw e; // Lança o erro para ser tratado em outro lugar, se necessário
+    throw e;
   }
 }
 
@@ -36,7 +36,7 @@ export async function createTables() {
     FOREIGN KEY (QuestionId) REFERENCES tbQuestions(QuestionId)
   );`;
 
-  let cx; // Declara a conexão fora do try
+  let cx;
   try {
     cx = await getDbConnection();
     await cx.execAsync(query1);
@@ -46,7 +46,7 @@ export async function createTables() {
     console.log("Erro ao criar tabelas: " + e.toString());
   } finally {
     if (cx) {
-      await cx.closeAsync(); // Fecha a conexão se foi aberta
+      await cx.closeAsync();
     }
   }
 }

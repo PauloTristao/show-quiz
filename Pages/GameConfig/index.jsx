@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import DropdownComponent from "../Components/DropdownComponent";
 import { ThemeContext } from "../../context/ThemeContext";
 import { QuestionContext } from "../../context/QuestionContext";
 import { AnswerContext } from "../../context/AnswerContext";
+import Button from "../Components/Button";
 
 function GameConfig({ navigation }) {
   const { themes } = useContext(ThemeContext);
   const { questions } = useContext(QuestionContext);
   const { answers, answersGame, setAnswersGame } = useContext(AnswerContext);
 
-  //const [questions, setQuestions] = useState(null);
-  //const [themes, setThemes] = useState(null);
-
-  const [quantity, setQuantity] = useState(0); //Quantidade de perguntas desejadas
+  const [quantity, setQuantity] = useState(0);
   const [selectedLabel, setSelectedLabel] = useState("");
   const [selectedValue, setSelectedValue] = useState();
   const [possibleQuestions, setPossibleQuestions] = useState(0);
@@ -26,8 +24,6 @@ function GameConfig({ navigation }) {
     value: theme.themeId,
   }));
 
-  // Verificar se está funcionando. Lógica: Filtrar todas as possíveis questões
-  // que possui o mesmo ID do selecionado no DropDown
   useEffect(() => {
     setPossibleQuestions(
       questions
@@ -38,24 +34,19 @@ function GameConfig({ navigation }) {
     );
   }, [selectedValue]);
 
-  // Função para gerar números aleatórios diferentes, caso um número já tenha sido sorteado,
-  // deverá refazer a iteração até gerar um array completo com números diferentes
   function generateRandomNumbers(size, quantity) {
     const numerosAleatorios = [];
     for (let i = 0; i < quantity; i++) {
-      // Gera um número inteiro aleatório entre min e max
       const numero = Math.floor(Math.random() * size);
       if (!numerosAleatorios.some((num) => num === numero)) {
         numerosAleatorios.push(numero);
       } else {
-        // Caso já haja um número pego, deverá desfazer a iteração
         i = i - 1;
       }
     }
     return numerosAleatorios;
   }
 
-  // Função para gerar as questões que serão enviadas para a página do jogo
   function generateQuestions() {
     const numerosAleatorios = generateRandomNumbers(
       possibleQuestions.length,
@@ -99,9 +90,10 @@ function GameConfig({ navigation }) {
         possibleQuestions.length >= quantity &&
         quantity > 0 && (
           <Button
-            title={"Iniciar novo jogo"}
-            onPress={() => generateQuestions()}
+            text={"Iniciar novo jogo"}
+            handleClick={() => generateQuestions()}
             style={styles.button}
+            textStyle={styles.buttonText}
           ></Button>
         )}
     </View>
@@ -113,9 +105,10 @@ export default GameConfig;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E6E6FA",
     alignItems: "center",
     justifyContent: "center",
+    padding: 20,
   },
   dropdown: {
     margin: 16,
@@ -123,20 +116,41 @@ const styles = StyleSheet.create({
     borderBottomColor: "gray",
     borderBottomWidth: 0.5,
     width: "80%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
   inputQuestions: {
     justifyContent: "space-between",
     alignItems: "center",
     padding: 30,
+    backgroundColor: "white",
+    borderRadius: 10,
+    width: "90%",
   },
   label: {
     fontSize: 18,
     marginBottom: 10,
+    color: "#4B0082",
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#4B0082",
     borderWidth: 1,
+    borderRadius: 10,
     paddingHorizontal: 10,
+    width: "100%",
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: "#4B0082",
+    borderRadius: 10,
+    padding: 10,
+    width: "80%",
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
 });

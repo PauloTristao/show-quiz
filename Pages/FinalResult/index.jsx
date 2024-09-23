@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
-import AnswerListGame from "../Components/AnswerListGame";
+import { View, Text, StyleSheet } from "react-native";
 import { AnswerContext } from "../../context/AnswerContext";
 import { QuestionContext } from "../../context/QuestionContext";
+import Button from "../Components/Button";
 
 function FinalResult({ navigation }) {
   const [result, setResult] = useState(0);
-  const { answers, answersGame, setAnswersGame } = useContext(AnswerContext);
-  const { questions, questionsGame, setQuestionsGame } =
-    useContext(QuestionContext);
+  const { answers, answersGame } = useContext(AnswerContext);
+  const { questionsGame } = useContext(QuestionContext);
 
   useEffect(() => {
     calculateScore();
@@ -45,15 +44,25 @@ function FinalResult({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>FinalResult</Text>
-      <Text>
-        Você acertou {result} de {questionsGame.length} questões
-      </Text>
+      <View style={styles.resultCard}>
+        <Text style={styles.title}>Resultado Final</Text>
+        <Text style={styles.resultText}>
+          Você acertou {result} de {questionsGame.length} questões
+        </Text>
+      </View>
+
       <Button
-        title={"Revisar questões"}
-        onPress={() => navigation.navigate("GameConfig")}
         style={styles.button}
-      ></Button>
+        textStyle={styles.buttonText}
+        text="Revisar questões"
+        handleClick={() => navigation.navigate("GameConfig")}
+      />
+      <Button
+        style={styles.button}
+        textStyle={styles.buttonText}
+        text="Iniciar novo jogo"
+        handleClick={() => navigation.navigate("GameConfig")}
+      />
     </View>
   );
 }
@@ -63,8 +72,45 @@ export default FinalResult;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#EDE7F6",
     alignItems: "center",
     justifyContent: "center",
+  },
+  resultCard: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+    width: "80%",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  resultText: {
+    fontSize: 18,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: "#4B0082",
+    borderRadius: 10,
+    padding: 10,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
 });

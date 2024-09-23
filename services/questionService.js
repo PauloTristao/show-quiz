@@ -1,7 +1,7 @@
 import * as dbService from "./dbService.js";
 
 export async function getAllQuestions() {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     var retorno = [];
     dbCx = await dbService.getDbConnection();
@@ -19,7 +19,7 @@ export async function getAllQuestions() {
     console.log("Erro no questionService:" + e.toString());
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Só fecha a conexão se ela foi aberta
+      await dbCx.closeAsync();
     }
   }
 }
@@ -38,7 +38,7 @@ export async function addQuestion(question) {
     return result.changes == 1;
   } catch (e) {
     console.log("Erro ao adicionar pergunta:" + e.toString());
-    return false; // Retorna false se houver falha
+    return false;
   } finally {
     if (dbCx) {
       await dbCx.closeAsync();

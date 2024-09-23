@@ -66,11 +66,10 @@ const styles = StyleSheet.create({
   itemForm: {
     height: 50,
     borderRadius: 15,
-    borderColor: "#dbd9d9",
+    borderColor: "#B8A8D9",
     borderWidth: 2,
-    backgroundColor: "#dbd9d9",
-    width: "85%",
-    textAlignVertical: "center",
+    backgroundColor: "#FFFFFF",
+    width: "80%",
   },
   line: {
     flexDirection: "row",

@@ -82,6 +82,7 @@ function List({ navigation, route }) {
           })
         }
         style={styles.button}
+        textStyle={styles.buttonText}
       ></Button>
       <ScrollView>
         {screenName.toLowerCase() === "themes" &&
@@ -137,21 +138,30 @@ export default List;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E6E6FA",
     alignItems: "center",
   },
   titulo: {
-    fontSize: 50,
-    marginBottom: 30,
+    fontSize: 36,
+    color: "#4A4A4A",
+    marginBottom: 20,
+    marginTop: 20,
+    fontWeight: "bold",
   },
   button: {
-    borderWidth: 2,
-    marginBottom: 20,
+    backgroundColor: "#4B0082",
+    borderWidth: 0,
     height: 50,
     width: "80%",
     borderRadius: 10,
-    borderColor: "#000",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
 });

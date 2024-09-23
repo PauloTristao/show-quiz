@@ -48,14 +48,11 @@ export default function App() {
                   headerBackVisible: true,
                   headerBackTitleVisible: false,
                 }}
-                // title: "Esta é tela 3",
-                // animation: "fade",
               />
               <Stack.Screen
                 name="Form"
                 component={Form}
                 options={{ headerBackVisible: true }}
-                // animation: "slide_from_bottom"
               />
             </Stack.Navigator>
           </NavigationContainer>

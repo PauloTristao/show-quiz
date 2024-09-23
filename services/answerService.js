@@ -1,7 +1,7 @@
 import * as dbService from "./dbService.js";
 
 export async function getAllAnswers() {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     var retorno = [];
     dbCx = await dbService.getDbConnection();
@@ -22,13 +22,13 @@ export async function getAllAnswers() {
     console.log("Erro no answerService:" + e.toString());
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Fecha a conexão se foi aberta
+      await dbCx.closeAsync();
     }
   }
 }
 
 export async function addAnswer(answer) {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     dbCx = await dbService.getDbConnection();
     let query =
@@ -42,16 +42,16 @@ export async function addAnswer(answer) {
     return result.changes == 1;
   } catch (e) {
     console.log("Erro ao adicionar resposta:" + e.toString());
-    return false; // Retorna false se houver falha
+    return false;
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Fecha a conexão se foi aberta
+      await dbCx.closeAsync();
     }
   }
 }
 
 export async function updateAnswer(answer) {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     dbCx = await dbService.getDbConnection();
     let query =
@@ -65,16 +65,16 @@ export async function updateAnswer(answer) {
     return result.changes == 1;
   } catch (e) {
     console.log("Erro ao atualizar resposta:" + e.toString());
-    return false; // Retorna false se houver falha
+    return false;
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Fecha a conexão se foi aberta
+      await dbCx.closeAsync();
     }
   }
 }
 
 export async function deleteAnswer(answerId) {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     dbCx = await dbService.getDbConnection();
     let query = "delete from tbAnswers where AnswerId=?";
@@ -82,16 +82,16 @@ export async function deleteAnswer(answerId) {
     return result.changes == 1;
   } catch (e) {
     console.log("Erro ao deletar resposta:" + e.toString());
-    return false; // Retorna false se houver falha
+    return false;
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Fecha a conexão se foi aberta
+      await dbCx.closeAsync();
     }
   }
 }
 
 export async function deleteAnswers(answersToDelete) {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     dbCx = await dbService.getDbConnection();
     await Promise.all(
@@ -104,13 +104,13 @@ export async function deleteAnswers(answersToDelete) {
     console.log("Erro ao deletar respostas:" + e.toString());
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Fecha a conexão se foi aberta
+      await dbCx.closeAsync();
     }
   }
 }
 
 export async function deleteAllAnswers() {
-  let dbCx; // Declara a conexão fora do try
+  let dbCx;
   try {
     dbCx = await dbService.getDbConnection();
     let query = "delete from tbAnswers";
@@ -119,7 +119,7 @@ export async function deleteAllAnswers() {
     console.log("Erro ao deletar todas as respostas:" + e.toString());
   } finally {
     if (dbCx) {
-      await dbCx.closeAsync(); // Fecha a conexão se foi aberta
+      await dbCx.closeAsync();
     }
   }
 }

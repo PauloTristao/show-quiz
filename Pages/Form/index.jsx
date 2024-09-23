@@ -26,7 +26,6 @@ function Form({ navigation, route }) {
   const [description, setDescription] = useState();
   const [questionId, setQuestionId] = useState();
   const [newAnswers, setNewAnswers] = useState([]);
-  // const [answersValues, setAnswersValues] = useState(new Array(4).fill({}));
 
   useEffect(() => {
     setDescription(data?.description);
@@ -83,7 +82,7 @@ function Form({ navigation, route }) {
           Alert.alert("Success!", "Successfully saved.", [
             {
               text: "OK",
-              onPress: () => navigation.goBack(), // Volta para a página anterior
+              onPress: () => navigation.goBack(),
             },
           ]);
           if (newRegister) {
@@ -172,20 +171,26 @@ function Form({ navigation, route }) {
           .toLowerCase()
           .slice(0, -1)}`}
       </Text>
-      <TextInput
-        onChangeText={(valor) => setDescription(valor)}
-        style={styles.caixaTexto}
-        value={description}
-      />
-      {screenName.toLowerCase() == "questions" && (
-        <ScrollView>{returnAnswers()}</ScrollView>
-      )}
+
+      {/* Card Branco para o conteúdo */}
+      <View style={styles.card}>
+        <TextInput
+          onChangeText={(valor) => setDescription(valor)}
+          style={styles.caixaTexto}
+          value={description}
+        />
+
+        {screenName.toLowerCase() == "questions" && (
+          <ScrollView>{returnAnswers()}</ScrollView>
+        )}
+      </View>
 
       <Button
         text={"Save"}
         handleClick={() => saveData()}
         style={styles.button}
-      ></Button>
+        textStyle={styles.buttonText}
+      />
     </View>
   );
 }
@@ -195,31 +200,51 @@ export default Form;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E5E0F2",
     alignItems: "center",
+    padding: 20,
   },
   titulo: {
-    fontSize: 50,
+    fontSize: 36,
+    color: "#4A4A4A",
+    marginBottom: 20,
+    fontWeight: "bold",
   },
   button: {
-    borderWidth: 2,
-    marginBottom: 10,
+    backgroundColor: "#4B0082",
+    borderWidth: 0,
     height: 50,
     width: "80%",
     borderRadius: 10,
-    borderColor: "#000",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   caixaTexto: {
-    width: "80%",
+    width: "100%",
     height: 50,
-    borderColor: "#0AF",
-    borderWidth: 2,
-    borderRadius: 20,
-    marginBottom: 30,
-    marginTop: 30,
+    borderColor: "#4B0082",
+    borderWidth: 4,
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    marginBottom: 20,
     paddingHorizontal: 10,
-    fontSize: 24,
+    fontSize: 18,
+  },
+  card: {
+    width: "100%",
+    padding: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

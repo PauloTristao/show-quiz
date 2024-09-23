@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { View, StyleSheet, Text, Alert } from "react-native";
 import Button from "../Components/Button";
 import * as themeService from "../../services/themeService";
@@ -11,9 +11,9 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { AnswerContext } from "../../context/AnswerContext";
 
 function Home({ navigation }) {
-  const { questions, setQuestions } = useContext(QuestionContext);
-  const { themes, setThemes } = useContext(ThemeContext);
-  const { answers, setAnswers } = useContext(AnswerContext);
+  const { setQuestions } = useContext(QuestionContext);
+  const { setThemes } = useContext(ThemeContext);
+  const { setAnswers } = useContext(AnswerContext);
 
   useEffect(() => {
     createDatabase();
@@ -45,20 +45,24 @@ function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>SHOW QUIZ</Text>
-      <View style={styles.buttonsArea}>
-        <Button
-          text={"Question Form"}
-          handleClick={() =>
-            navigation.navigate("List", { screenName: "Themes" })
-          }
-          style={styles.button}
-        ></Button>
-        <View style={{ marginTop: 10 }}></View>
-        <Button
-          text={"Play"}
-          handleClick={() => navigation.navigate("GameConfig")}
-          style={styles.button}
-        ></Button>
+      <View style={styles.card}>
+        <View style={styles.buttonsArea}>
+          <Button
+            text={"Question Form"}
+            handleClick={() =>
+              navigation.navigate("List", { screenName: "Themes" })
+            }
+            style={styles.button}
+            textStyle={styles.buttonText}
+          />
+          <View style={{ marginTop: 20 }} />
+          <Button
+            text={"Play"}
+            handleClick={() => navigation.navigate("GameConfig")}
+            style={styles.button}
+            textStyle={styles.buttonText}
+          />
+        </View>
       </View>
     </View>
   );
@@ -69,29 +73,40 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E5DFF1",
     alignItems: "center",
-    // backgroundColor: "#fab",
+    justifyContent: "center",
   },
   titulo: {
     fontSize: 50,
-    marginTop: 100,
-    // backgroundColor: "#fae",
+    color: "#4B0082",
+    marginBottom: 20,
+    fontWeight: "bold",
+  },
+  card: {
+    backgroundColor: "#FFF",
+    borderRadius: 20,
+    padding: 20,
+    width: "90%",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 10,
   },
   buttonsArea: {
-    // flex: 1,
-    marginTop: 190,
-    // alignItems: "center",
-    // backgroundColor: "#bae",
     justifyContent: "center",
-    width: "90%",
+    width: "100%",
   },
   button: {
-    borderWidth: 2,
-    height: 50,
+    marginTop: 5,
+    backgroundColor: "#4B0082",
     borderRadius: 10,
-    borderColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 10,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
 });

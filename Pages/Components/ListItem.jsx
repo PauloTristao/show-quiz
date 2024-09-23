@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
   itemForm: {
     height: 50,
     borderRadius: 15,
-    borderColor: "#dbd9d9",
+    borderColor: "#4B0082",
     borderWidth: 2,
-    backgroundColor: "#dbd9d9",
+    backgroundColor: "#fff",
     marginBottom: 5,
   },
   itemContent: {
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
     width: "75%",
+    color: "#4B0082",
   },
   fastIcon: {
     width: 25,
