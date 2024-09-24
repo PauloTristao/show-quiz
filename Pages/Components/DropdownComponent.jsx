@@ -21,7 +21,7 @@ const DropdownComponent = ({
       maxHeight={300}
       labelField="label"
       valueField="value"
-      placeholder={selectedValue ? selectedValue : "Select Item"}
+      placeholder={selectedValue ? selectedValue : "Select theme"}
       searchPlaceholder="Search..."
       onChange={(item) => {
         setSelectedLabel(item.label);

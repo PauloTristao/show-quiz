@@ -22,6 +22,7 @@ function Home({ navigation }) {
   async function createDatabase() {
     try {
       await dbService.createTables();
+      await dbService.generateInitialData();
       loadData();
     } catch (e) {
       console.log(e);

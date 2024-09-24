@@ -1,9 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { AnswerContext } from "../../context/AnswerContext";
 
-const AnswerList = ({ answersParam, questionId }) => {
+const AnswerList = ({
+  answersParam,
+  questionId,
+  correctAnswerId,
+  isReviewMode,
+}) => {
   const [answersByQuestion, setAnswersByQuestion] = useState([]);
   const { answers, answersGame, setAnswersGame } = useContext(AnswerContext);
 
@@ -14,6 +19,7 @@ const AnswerList = ({ answersParam, questionId }) => {
   }, [answersParam]);
 
   const handleCheckboxPress = (answerId) => {
+    if (isReviewMode) return;
     setAnswersGame((prevAnswers) => {
       const answerToUpdate = answers.find(
         (answer) => answer.answerId === answerId
@@ -40,9 +46,46 @@ const AnswerList = ({ answersParam, questionId }) => {
     });
   };
 
+  const getCheckboxStyle = (answerId) => {
+    if (isReviewMode) {
+      const userAnswers = answersGame.filter(
+        (answer) => answer.questionId === questionId
+      );
+
+      const hasCorrectAnswer = userAnswers.some(
+        (answer) =>
+          answer.answerId === correctAnswerId && answer.isCorrect === 1
+      );
+
+      if (!hasCorrectAnswer) {
+        return { ...styles.wrongAnswer };
+      }
+
+      const isSelectedAnswer = userAnswers.find(
+        (answer) => answer.answerId === answerId
+      );
+
+      if (answerId === correctAnswerId) {
+        return { ...styles.correctAnswer };
+      }
+
+      if (isSelectedAnswer) {
+        return { ...styles.wrongAnswer };
+      }
+
+      return {};
+    }
+
+    return {};
+  };
+
   const renderAnswers = () => {
     return answersByQuestion.map((answer) => (
-      <View style={styles.line} key={answer.answerId}>
+      <TouchableOpacity
+        style={styles.line}
+        key={answer.answerId}
+        onPress={() => handleCheckboxPress(answer.answerId)}
+      >
         <BouncyCheckbox
           fillColor="black"
           unFillColor="#FFFFFF"
@@ -51,9 +94,13 @@ const AnswerList = ({ answersParam, questionId }) => {
           onPress={() => {
             handleCheckboxPress(answer.answerId);
           }}
+          isChecked={answersGame.some(
+            (selectedAnswer) => selectedAnswer.answerId === answer.answerId
+          )}
+          style={getCheckboxStyle(answer.answerId)}
         />
         <Text style={styles.itemForm}>{answer.description}</Text>
-      </View>
+      </TouchableOpacity>
     ));
   };
 
@@ -69,10 +116,24 @@ const styles = StyleSheet.create({
     borderColor: "#B8A8D9",
     borderWidth: 2,
     backgroundColor: "#FFFFFF",
-    width: "80%",
+    paddingLeft: 5,
+
+    fontSize: 15,
+    width: "75%",
+    color: "#4B0082",
+    textAlignVertical: "center",
   },
   line: {
+    width: "110%",
     flexDirection: "row",
     marginBottom: 10,
+  },
+  correctAnswer: {
+    borderColor: "#28a745",
+    backgroundColor: "#d4edda",
+  },
+  wrongAnswer: {
+    borderColor: "#dc3545",
+    backgroundColor: "#f8d7da",
   },
 });

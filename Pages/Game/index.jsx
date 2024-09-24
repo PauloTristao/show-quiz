@@ -80,8 +80,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   caixaTexto: {
+    fontSize: 18,
     height: 100,
-    borderColor: "gray",
+    borderColor: "#4B0082",
     borderWidth: 1,
     marginBottom: 20,
     width: "100%",

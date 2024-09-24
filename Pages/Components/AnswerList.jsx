@@ -88,10 +88,15 @@ const styles = StyleSheet.create({
     borderColor: "#B8A8D9",
     borderWidth: 2,
     backgroundColor: "#FFFFFF",
-    width: "80%",
+    paddingLeft: 5,
+    width: "90%",
+    fontSize: 15,
+    width: "75%",
+    color: "#4B0082",
   },
   line: {
     flexDirection: "row",
+    width: "110%",
     marginBottom: 10,
   },
 });

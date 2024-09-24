@@ -178,6 +178,7 @@ function Form({ navigation, route }) {
           onChangeText={(valor) => setDescription(valor)}
           style={styles.caixaTexto}
           value={description}
+          multiline={true}
         />
 
         {screenName.toLowerCase() == "questions" && (
@@ -226,15 +227,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   caixaTexto: {
-    width: "100%",
-    height: 50,
-    borderColor: "#4B0082",
-    borderWidth: 4,
-    borderRadius: 10,
-    backgroundColor: "#FFFFFF",
-    marginBottom: 20,
-    paddingHorizontal: 10,
     fontSize: 18,
+    height: 100,
+    borderColor: "#4B0082",
+    borderWidth: 1,
+    marginBottom: 20,
+    width: "100%",
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    textAlignVertical: "top",
   },
   card: {
     width: "100%",

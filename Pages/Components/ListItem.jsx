@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
     width: "75%",
+    paddingLeft: 5,
     color: "#4B0082",
   },
   fastIcon: {

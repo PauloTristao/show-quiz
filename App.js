@@ -8,6 +8,7 @@ import GameConfig from "./Pages/GameConfig";
 import Form from "./Pages/Form";
 import List from "./Pages/List";
 import Game from "./Pages/Game";
+import ReviewQuestions from "./Pages/ReviewQuestions";
 import { QuestionProvider } from "./context/QuestionContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AnswerProvider } from "./context/AnswerContext";
@@ -29,7 +30,11 @@ export default function App() {
               <Stack.Screen
                 name="GameConfig"
                 component={GameConfig}
-                options={{ headerBackVisible: true, headerShown: true }}
+                options={{
+                  headerBackVisible: true,
+                  headerShown: true,
+                  headerTitle: "",
+                }}
               />
               <Stack.Screen
                 name="Game"
@@ -39,7 +44,12 @@ export default function App() {
               <Stack.Screen
                 name="FinalResult"
                 component={FinalResult}
-                options={{ headerBackVisible: false, headerShown: true }}
+                options={{ headerBackVisible: false, headerShown: false }}
+              />
+              <Stack.Screen
+                name="ReviewQuestions"
+                component={ReviewQuestions}
+                options={{ headerBackVisible: true, headerShown: false }}
               />
               <Stack.Screen
                 name="List"
@@ -47,12 +57,13 @@ export default function App() {
                 options={{
                   headerBackVisible: true,
                   headerBackTitleVisible: false,
+                  headerTitle: "",
                 }}
               />
               <Stack.Screen
                 name="Form"
                 component={Form}
-                options={{ headerBackVisible: true }}
+                options={{ headerBackVisible: true, headerTitle: "" }}
               />
             </Stack.Navigator>
           </NavigationContainer>

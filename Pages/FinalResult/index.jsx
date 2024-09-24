@@ -55,7 +55,7 @@ function FinalResult({ navigation }) {
         style={styles.button}
         textStyle={styles.buttonText}
         text="Revisar questões"
-        handleClick={() => navigation.navigate("GameConfig")}
+        handleClick={() => navigation.navigate("ReviewQuestions")}
       />
       <Button
         style={styles.button}

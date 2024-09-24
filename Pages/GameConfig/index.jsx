@@ -83,7 +83,7 @@ function GameConfig({ navigation }) {
           placeholder="Número de perguntas"
         />
         <Text styles={styles.label}>
-          Quantidade de perguntas disponíveis: {possibleQuestions.length}{" "}
+          Perguntas disponíveis: {possibleQuestions.length}{" "}
         </Text>
       </View>
       {selectedValue &&
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomColor: "gray",
     borderBottomWidth: 0.5,
-    width: "80%",
+    width: "90%",
     backgroundColor: "white",
     borderRadius: 10,
     paddingHorizontal: 10,
